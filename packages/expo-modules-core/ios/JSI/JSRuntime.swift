@@ -1,6 +1,5 @@
 // Copyright 2025-present 650 Industries. All rights reserved.
 
-@available(iOS 16.4, *)
 open class JavaScriptRuntime: Equatable, @unchecked Sendable {
   // TODO: Make it internal
   public let pointee: facebook.jsi.Runtime
@@ -54,23 +53,22 @@ open class JavaScriptRuntime: Equatable, @unchecked Sendable {
     getPropertyNames: @escaping () -> [String],
     dealloc: @escaping () -> Void
   ) -> JavaScriptObject {
-    return createObject()
-//    let hostObject = expo.HostObject.makeObject(
-//      pointee,
-//      { (propertyName: std.string) in
-//        return get(String(propertyName)).pointee
-//      },
-//      { (propertyName: std.string, value: consuming facebook.jsi.Value) in
-//        set(String(propertyName), JavaScriptValue(self, value))
-//      },
-//      {
-//        fatalError()
-//      },
-//      {
-//        dealloc()
-//      }
-//    )
-//    return JavaScriptObject(self, hostObject)
+    let hostObject = expo.HostObject.makeObject(
+      pointee,
+      { (propertyName: std.string) in
+        return get(String(propertyName)).pointee
+      },
+      { (propertyName: std.string, value: borrowing facebook.jsi.Value) in
+        set(String(propertyName), JavaScriptValue(self, value))
+      },
+      {
+        return []
+      },
+      {
+        dealloc()
+      }
+    )
+    return JavaScriptObject(self, hostObject)
   }
 
   // MARK: - Creating functions

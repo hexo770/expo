@@ -31,9 +31,9 @@ std::vector<jsi::PropNameID> HostObject::getPropertyNames(jsi::Runtime &runtime)
   return propertyNamesIds;
 }
 
-const jsi::Object HostObject::makeObject(jsi::Runtime &runtime, GetFunction get, SetFunction set, GetPropertyNamesFunction getPropertyNames, DeallocFunction dealloc) {
-  auto hostObjectPtr = std::make_shared<HostObject>(get, set, getPropertyNames, dealloc);
-  return jsi::Object::createFromHostObject(runtime, hostObjectPtr);
+jsi::Object HostObject::makeObject(jsi::Runtime &runtime, GetFunction get, SetFunction set, GetPropertyNamesFunction getPropertyNames, DeallocFunction dealloc) {
+  return jsi::Object(runtime);
+//  return jsi::Object::createFromHostObject(runtime, std::make_shared<HostObject>(get, set, getPropertyNames, dealloc));
 }
 
 } // namespace expo
